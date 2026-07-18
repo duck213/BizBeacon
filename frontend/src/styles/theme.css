@@ -1,0 +1,116 @@
+:root {
+  /* Colors - Brand & Accent */
+  --color-primary: #5e6ad2;
+  --color-primary-hover: #828fff;
+  --color-primary-focus: #5e69d1;
+  --color-brand-secure: #7a7fad;
+
+  /* Colors - Surface */
+  --color-canvas: #010102;
+  --color-surface-1: #161618;
+  --color-surface-2: #222326;
+  --color-surface-3: #2d2e32;
+  --color-surface-4: #38393e;
+  --color-hairline: #262626;
+  --color-hairline-strong: #454652;
+  --color-inverse-canvas: #ffffff;
+
+  /* Colors - Text */
+  --color-ink: #f7f8f8;
+  --color-ink-muted: #d0d6e0;
+  --color-ink-subtle: #8a8f98;
+  --color-ink-tertiary: #62666d;
+
+  /* Colors - Semantic */
+  --color-semantic-success: #4cfb8d;
+  --color-semantic-overlay: rgba(0, 0, 0, 0.8);
+
+  /* Typography */
+  --font-family-display: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-family-text: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-family-mono: "JetBrains Mono", "Geist Mono", "SF Mono", monospace;
+
+  --typography-display-lg-size: 56px;
+  --typography-display-lg-weight: 600;
+  --typography-display-lg-lh: 1.10;
+  --typography-display-lg-ls: -1.8px;
+
+  --typography-display-md-size: 40px;
+  --typography-display-md-weight: 600;
+  --typography-display-md-lh: 1.15;
+  --typography-display-md-ls: -1.0px;
+
+  --typography-headline-size: 28px;
+  --typography-headline-weight: 600;
+  --typography-headline-lh: 1.20;
+  --typography-headline-ls: -0.6px;
+
+  --typography-card-title-size: 22px;
+  --typography-card-title-weight: 500;
+  --typography-card-title-lh: 1.25;
+  --typography-card-title-ls: -0.4px;
+
+  --typography-subhead-size: 20px;
+  --typography-subhead-weight: 400;
+  --typography-subhead-lh: 1.40;
+  --typography-subhead-ls: -0.2px;
+
+  --typography-body-lg-size: 18px;
+  --typography-body-lg-weight: 400;
+  --typography-body-lg-lh: 1.50;
+  --typography-body-lg-ls: -0.1px;
+
+  --typography-body-size: 16px;
+  --typography-body-weight: 400;
+  --typography-body-lh: 1.50;
+  --typography-body-ls: -0.05px;
+
+  --typography-caption-size: 12px;
+  --typography-caption-weight: 400;
+  --typography-caption-lh: 1.40;
+  --typography-caption-ls: 0px;
+
+  --typography-button-size: 14px;
+  --typography-button-weight: 500;
+  --typography-button-lh: 1.20;
+  --typography-button-ls: 0px;
+
+  --typography-eyebrow-size: 13px;
+  --typography-eyebrow-weight: 500;
+  --typography-eyebrow-lh: 1.30;
+  --typography-eyebrow-ls: 0.4px;
+
+  /* Spacing */
+  --spacing-base: 4px;
+  --spacing-xxs: 4px;
+  --spacing-xs: 8px;
+  --spacing-sm: 12px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+  --spacing-xxl: 48px;
+  --spacing-section: 96px;
+
+  /* Border Radius */
+  --rounded-xs: 4px;
+  --rounded-sm: 6px;
+  --rounded-md: 8px;
+  --rounded-lg: 12px;
+  --rounded-xl: 16px;
+  --rounded-xxl: 24px;
+  --rounded-pill: 9999px;
+  --rounded-full: 9999px;
+}
+
+body {
+  background-color: var(--color-canvas);
+  color: var(--color-ink);
+  font-family: var(--font-family-text);
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+*, *::before, *::after {
+  box-sizing: inherit;
+}

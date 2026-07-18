@@ -1,0 +1,21 @@
+.card {
+  background-color: var(--color-surface-1);
+  border: 1px solid var(--color-hairline);
+  color: var(--color-ink);
+}
+
+.default {
+  border-radius: var(--rounded-lg);
+  padding: var(--spacing-lg);
+}
+
+.featured {
+  background-color: var(--color-surface-2);
+  border-radius: var(--rounded-lg);
+  padding: var(--spacing-lg);
+}
+
+.screenshot {
+  border-radius: var(--rounded-xl);
+  padding: var(--spacing-lg);
+}

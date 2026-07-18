@@ -1,0 +1,219 @@
+.layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: var(--color-canvas);
+}
+
+.wordmark {
+  font-family: var(--font-family-display);
+  font-weight: 600;
+  font-size: var(--typography-headline-size);
+  color: var(--color-primary);
+  letter-spacing: var(--typography-headline-ls);
+}
+
+.main {
+  max-width: 1280px;
+  margin: 0 auto;
+  width: 100%;
+  padding: var(--spacing-xl);
+  flex: 1;
+}
+
+.headerArea {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-xxl);
+}
+
+.breadcrumbs {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  font-family: var(--font-family-text);
+  font-size: var(--typography-caption-size);
+  color: var(--color-ink-subtle);
+}
+
+.breadcrumbs a {
+  color: var(--color-ink-muted);
+  text-decoration: none;
+}
+
+.breadcrumbs a:hover {
+  color: var(--color-primary);
+}
+
+.headerActions {
+  display: flex;
+  gap: var(--spacing-sm);
+}
+
+.reportHeader {
+  margin-bottom: var(--spacing-section);
+}
+
+.reportTitle {
+  font-family: var(--font-family-display);
+  font-size: var(--typography-display-md-size);
+  font-weight: var(--typography-display-md-weight);
+  letter-spacing: var(--typography-display-md-ls);
+  color: var(--color-ink);
+  margin: 0 0 var(--spacing-xs) 0;
+}
+
+.reportSubtitle {
+  font-family: var(--font-family-text);
+  font-size: var(--typography-subhead-size);
+  color: var(--color-ink-muted);
+  margin: 0 0 var(--spacing-lg) 0;
+  max-width: 800px;
+}
+
+.tags {
+  display: flex;
+  gap: var(--spacing-xs);
+}
+
+.contentGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--spacing-lg);
+}
+
+@media (min-width: 1024px) {
+  .contentGrid {
+    grid-template-columns: 2fr 1fr;
+  }
+}
+
+.primaryContent {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+}
+
+.secondaryContent {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+}
+
+.sectionTitle {
+  font-family: var(--font-family-text);
+  font-size: var(--typography-card-title-size);
+  font-weight: var(--typography-card-title-weight);
+  letter-spacing: var(--typography-card-title-ls);
+  color: var(--color-ink);
+  margin: 0 0 var(--spacing-md) 0;
+}
+
+.chartCard {
+  padding: var(--spacing-xl);
+}
+
+.textCard {
+  padding: var(--spacing-xl);
+}
+
+.chartPlaceholder {
+  height: 300px;
+  background-color: var(--color-surface-2);
+  border-radius: var(--rounded-md);
+  border: 1px solid var(--color-hairline);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.lineChart {
+  width: 80%;
+  height: 60%;
+  border-bottom: 2px solid var(--color-hairline-strong);
+  border-left: 2px solid var(--color-hairline-strong);
+  position: relative;
+}
+
+.lineChart::after {
+  content: '';
+  position: absolute;
+  top: 20%;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-top: 3px solid var(--color-primary);
+  border-radius: 50%;
+  transform: rotate(-15deg);
+  transform-origin: left;
+}
+
+.paragraph {
+  font-family: var(--font-family-text);
+  font-size: var(--typography-body-size);
+  color: var(--color-ink-muted);
+  line-height: var(--typography-body-lh);
+  margin: 0 0 var(--spacing-md) 0;
+}
+
+.list {
+  margin: 0;
+  padding-left: var(--spacing-md);
+  font-family: var(--font-family-text);
+  font-size: var(--typography-body-size);
+  color: var(--color-ink-muted);
+}
+
+.list li {
+  margin-bottom: var(--spacing-xs);
+}
+
+.competitorList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.competitorItem {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-sm);
+  background-color: var(--color-surface-2);
+  border-radius: var(--rounded-md);
+  border: 1px solid var(--color-hairline);
+}
+
+.compAvatar {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--rounded-full);
+  background-color: var(--color-primary-container);
+  color: var(--color-inverse-canvas);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-family: var(--font-family-display);
+}
+
+.compInfo {
+  display: flex;
+  flex-direction: column;
+}
+
+.compName {
+  font-family: var(--font-family-text);
+  font-size: var(--typography-body-size);
+  color: var(--color-ink);
+  font-weight: 500;
+}
+
+.compScore {
+  font-family: var(--font-family-text);
+  font-size: var(--typography-caption-size);
+  color: var(--color-semantic-success);
+}

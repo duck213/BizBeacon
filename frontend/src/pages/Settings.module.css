@@ -1,0 +1,123 @@
+.layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: var(--color-canvas);
+}
+
+.wordmark {
+  font-family: var(--font-family-display);
+  font-weight: 600;
+  font-size: var(--typography-headline-size);
+  color: var(--color-primary);
+  letter-spacing: var(--typography-headline-ls);
+}
+
+.main {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  padding: var(--spacing-xxl) var(--spacing-lg);
+}
+
+.container {
+  display: flex;
+  width: 100%;
+  max-width: 1000px;
+  gap: var(--spacing-xxl);
+}
+
+.sidebar {
+  width: 240px;
+}
+
+.sidebarNav {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.link, .activeLink {
+  font-family: var(--font-family-text);
+  font-size: var(--typography-body-size);
+  padding: var(--spacing-sm);
+  border-radius: var(--rounded-md);
+  text-decoration: none;
+  transition: all 0.2s;
+}
+
+.link {
+  color: var(--color-ink-subtle);
+}
+
+.link:hover {
+  background-color: var(--color-surface-1);
+  color: var(--color-ink);
+}
+
+.activeLink {
+  background-color: var(--color-surface-2);
+  color: var(--color-ink);
+  font-weight: 500;
+}
+
+.content {
+  flex: 1;
+}
+
+.header {
+  margin-bottom: var(--spacing-xl);
+}
+
+.title {
+  font-family: var(--font-family-display);
+  font-size: var(--typography-headline-size);
+  font-weight: var(--typography-headline-weight);
+  color: var(--color-ink);
+  margin: 0 0 var(--spacing-sm) 0;
+}
+
+.subtitle {
+  font-family: var(--font-family-text);
+  font-size: var(--typography-body-size);
+  color: var(--color-ink-muted);
+  margin: 0;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xxl);
+}
+
+.formSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+  padding-bottom: var(--spacing-xl);
+  border-bottom: 1px solid var(--color-hairline);
+}
+
+.sectionTitle {
+  font-family: var(--font-family-text);
+  font-size: var(--typography-subhead-size);
+  color: var(--color-ink);
+  margin: 0;
+}
+
+.checkboxGroup {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.checkboxGroup label {
+  font-family: var(--font-family-text);
+  font-size: var(--typography-body-size);
+  color: var(--color-ink-muted);
+}
+
+.actions {
+  display: flex;
+  gap: var(--spacing-sm);
+}

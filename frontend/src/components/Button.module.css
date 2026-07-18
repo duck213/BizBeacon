@@ -1,0 +1,57 @@
+.button {
+  font-family: var(--font-family-text);
+  font-size: var(--typography-button-size);
+  font-weight: var(--typography-button-weight);
+  line-height: var(--typography-button-lh);
+  letter-spacing: var(--typography-button-ls);
+  border-radius: var(--rounded-md);
+  padding: 8px 14px;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s ease-in-out;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.button:focus-visible {
+  outline: 2px solid var(--color-primary-focus);
+  outline-offset: 2px;
+}
+
+.primary {
+  background-color: var(--color-primary);
+  color: var(--color-inverse-canvas);
+}
+
+.primary:hover {
+  background-color: var(--color-primary-hover);
+}
+
+.primary:active {
+  background-color: var(--color-primary-focus);
+}
+
+.secondary {
+  background-color: var(--color-surface-1);
+  color: var(--color-ink);
+  border: 1px solid var(--color-hairline);
+}
+
+.secondary:hover {
+  background-color: var(--color-surface-2);
+}
+
+.tertiary {
+  background-color: transparent;
+  color: var(--color-ink);
+}
+
+.tertiary:hover {
+  background-color: var(--color-surface-1);
+}
+
+.inverse {
+  background-color: var(--color-inverse-canvas);
+  color: var(--color-canvas);
+}
