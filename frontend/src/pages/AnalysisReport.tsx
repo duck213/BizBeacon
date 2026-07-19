@@ -1,12 +1,43 @@
-import React from 'react';
+"use client";
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import styles from './AnalysisReport.module.css';
 import { TopNav } from '../components/TopNav';
 import { Button } from '../components/Button';
 import { Card } from '../components/Card';
 import { Badge } from '../components/Badge';
+import { fetchApi } from '../utils/api';
+
+interface ReportDetails {
+  title: string;
+  impactScore: number;
+  summary: string;
+  chartData: number[];
+  competitors: string[];
+}
 
 export const AnalysisReport: React.FC = () => {
+  const [report, setReport] = useState<ReportDetails | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const loadReport = async () => {
+      try {
+        setIsLoading(true);
+        // Using a hardcoded ID '1' for prototype purposes
+        const data = await fetchApi<ReportDetails>('/api/v1/reports/1');
+        setReport(data);
+      } catch (err: any) {
+        setError(err.message || 'Failed to load report details');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    loadReport();
+  }, []);
+
   return (
     <div className={styles.layout}>
       <TopNav 
@@ -32,73 +63,72 @@ export const AnalysisReport: React.FC = () => {
           </div>
         </div>
 
-        <div className={styles.reportHeader}>
-          <h1 className={styles.reportTitle}>Q1 Retail AI Adoption</h1>
-          <p className={styles.reportSubtitle}>Comprehensive breakdown of automated inventory management across mid-market retailers.</p>
-          <div className={styles.tags}>
-            <Badge>Retail</Badge>
-            <Badge>AI & Automation</Badge>
-            <Badge variant="status">Impact Score: 9.2</Badge>
-          </div>
-        </div>
-
-        <div className={styles.contentGrid}>
-          {/* Main Insights */}
-          <div className={styles.primaryContent}>
-            <Card className={styles.chartCard}>
-              <h3 className={styles.sectionTitle}>Adoption Rate Over Time</h3>
-              <div className={styles.chartPlaceholder}>
-                <div className={styles.lineChart}></div>
+        {isLoading ? (
+          <div style={{ padding: '2rem', textAlign: 'center', color: '#888' }}>Loading report details...</div>
+        ) : error ? (
+          <div style={{ padding: '2rem', textAlign: 'center', color: 'red' }}>{error}</div>
+        ) : report ? (
+          <>
+            <div className={styles.reportHeader}>
+              <h1 className={styles.reportTitle}>{report.title}</h1>
+              <p className={styles.reportSubtitle}>Comprehensive breakdown based on the latest AI generation model.</p>
+              <div className={styles.tags}>
+                <Badge>Retail</Badge>
+                <Badge>AI & Automation</Badge>
+                <Badge variant="status">Impact Score: {report.impactScore}</Badge>
               </div>
-            </Card>
+            </div>
 
-            <Card className={styles.textCard}>
-              <h3 className={styles.sectionTitle}>Executive Summary</h3>
-              <p className={styles.paragraph}>
-                The landscape of mid-market retail is experiencing a rapid shift towards AI-driven automation. 
-                Our analysis indicates a 45% surge in adoption over the last quarter, primarily driven by the 
-                need to optimize supply chain inefficiencies and counter rising labor costs.
-              </p>
-              <p className={styles.paragraph}>
-                Key players such as Acme Corp and Globex have successfully integrated these solutions, 
-                resulting in a 15% reduction in stockouts and a 20% improvement in forecasting accuracy.
-              </p>
-            </Card>
-          </div>
-
-          {/* Sidebar Insights */}
-          <div className={styles.secondaryContent}>
-            <Card>
-              <h3 className={styles.sectionTitle}>Key Drivers</h3>
-              <ul className={styles.list}>
-                <li>Supply chain volatility</li>
-                <li>Labor shortages</li>
-                <li>E-commerce competition</li>
-              </ul>
-            </Card>
-
-            <Card>
-              <h3 className={styles.sectionTitle}>Top Competitors</h3>
-              <div className={styles.competitorList}>
-                <div className={styles.competitorItem}>
-                  <div className={styles.compAvatar}>A</div>
-                  <div className={styles.compInfo}>
-                    <span className={styles.compName}>Acme Corp</span>
-                    <span className={styles.compScore}>High Threat</span>
+            <div className={styles.contentGrid}>
+              {/* Main Insights */}
+              <div className={styles.primaryContent}>
+                <Card className={styles.chartCard}>
+                  <h3 className={styles.sectionTitle}>Adoption Rate Over Time</h3>
+                  <div className={styles.chartPlaceholder}>
+                    <div className={styles.lineChart}></div>
                   </div>
-                </div>
-                <div className={styles.competitorItem}>
-                  <div className={styles.compAvatar}>G</div>
-                  <div className={styles.compInfo}>
-                    <span className={styles.compName}>Globex</span>
-                    <span className={styles.compScore}>Medium Threat</span>
-                  </div>
-                </div>
+                </Card>
+
+                <Card className={styles.textCard}>
+                  <h3 className={styles.sectionTitle}>Executive Summary</h3>
+                  <p className={styles.paragraph}>
+                    {report.summary}
+                  </p>
+                </Card>
               </div>
-            </Card>
-          </div>
-        </div>
+
+              {/* Sidebar Insights */}
+              <div className={styles.secondaryContent}>
+                <Card>
+                  <h3 className={styles.sectionTitle}>Key Drivers</h3>
+                  <ul className={styles.list}>
+                    <li>Supply chain volatility</li>
+                    <li>Labor shortages</li>
+                    <li>E-commerce competition</li>
+                  </ul>
+                </Card>
+
+                <Card>
+                  <h3 className={styles.sectionTitle}>Top Competitors</h3>
+                  <div className={styles.competitorList}>
+                    {report.competitors.map((comp, idx) => (
+                      <div className={styles.competitorItem} key={idx}>
+                        <div className={styles.compAvatar}>{comp[0]}</div>
+                        <div className={styles.compInfo}>
+                          <span className={styles.compName}>{comp}</span>
+                          <span className={styles.compScore}>{idx === 0 ? 'High Threat' : 'Medium Threat'}</span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </Card>
+              </div>
+            </div>
+          </>
+        ) : null}
       </main>
     </div>
   );
 };
+
+export default AnalysisReport;

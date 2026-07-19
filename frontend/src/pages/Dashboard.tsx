@@ -1,11 +1,50 @@
-import React from 'react';
+"use client";
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import styles from './Dashboard.module.css';
 import { TopNav } from '../components/TopNav';
 import { Button } from '../components/Button';
 import { Card } from '../components/Card';
+import { fetchApi } from '../utils/api';
+
+interface SearchHistoryItem {
+  id: string;
+  keyword: string;
+  date: string;
+}
+
+interface DashboardSummary {
+  trendAlert: { title: string; description: string };
+  competitorIntel: { title: string; description: string };
+  marketSentiment: { title: string; description: string; value: string };
+}
 
 export const Dashboard: React.FC = () => {
+  const [searchHistory, setSearchHistory] = useState<SearchHistoryItem[]>([]);
+  const [summary, setSummary] = useState<DashboardSummary | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        setIsLoading(true);
+        const [historyData, summaryData] = await Promise.all([
+          fetchApi<SearchHistoryItem[]>('/api/v1/search/history'),
+          fetchApi<DashboardSummary>('/api/v1/dashboard/summary')
+        ]);
+        setSearchHistory(historyData);
+        setSummary(summaryData);
+      } catch (err: any) {
+        setError(err.message || 'Failed to load data');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    loadData();
+  }, []);
+
   return (
     <div className={styles.layout}>
       <TopNav 
@@ -35,22 +74,12 @@ export const Dashboard: React.FC = () => {
           </Button>
 
           <nav className={styles.sidebarNav}>
-            <Link href="/analysis" className={`${styles.sidebarLink} ${styles.activeLink}`}>
-              <span className="material-symbols-outlined">history</span>
-              Q1 Tech Trends
-            </Link>
-            <Link href="#" className={styles.sidebarLink}>
-              <span className="material-symbols-outlined">history</span>
-              Retail Growth
-            </Link>
-            <Link href="#" className={styles.sidebarLink}>
-              <span className="material-symbols-outlined">history</span>
-              SaaS Analysis
-            </Link>
-            <Link href="#" className={styles.sidebarLink}>
-              <span className="material-symbols-outlined">history</span>
-              Logistics AI
-            </Link>
+            {searchHistory.map((item, index) => (
+              <Link href="/analysis" key={item.id} className={`${styles.sidebarLink} ${index === 0 ? styles.activeLink : ''}`}>
+                <span className="material-symbols-outlined">history</span>
+                {item.keyword}
+              </Link>
+            ))}
           </nav>
 
           <div className={styles.sidebarFooter}>
@@ -104,43 +133,49 @@ export const Dashboard: React.FC = () => {
               </div>
             </div>
 
-            <div className={styles.grid}>
-              <Card>
-                <div className={styles.cardHeader}>
-                  <span className={styles.eyebrowPrimary}>Trend Alert</span>
-                  <span className="material-symbols-outlined">trending_up</span>
-                </div>
-                <h3 className={styles.cardTitle}>AI Adoption in Retail</h3>
-                <p className={styles.cardBody}>Analysis indicates a 45% surge in automated inventory management solutions within mid-market retail sectors over the last quarter.</p>
-                <div className={styles.cardVisualPlaceholder}></div>
-              </Card>
+            {isLoading ? (
+              <div style={{ padding: '2rem', textAlign: 'center', color: '#888' }}>Loading dashboard data...</div>
+            ) : error ? (
+              <div style={{ padding: '2rem', textAlign: 'center', color: 'red' }}>{error}</div>
+            ) : summary ? (
+              <div className={styles.grid}>
+                <Card>
+                  <div className={styles.cardHeader}>
+                    <span className={styles.eyebrowPrimary}>Trend Alert</span>
+                    <span className="material-symbols-outlined">trending_up</span>
+                  </div>
+                  <h3 className={styles.cardTitle}>{summary.trendAlert.title}</h3>
+                  <p className={styles.cardBody}>{summary.trendAlert.description}</p>
+                  <div className={styles.cardVisualPlaceholder}></div>
+                </Card>
 
-              <Card>
-                <div className={styles.cardHeader}>
-                  <span className={styles.eyebrowTertiary}>Competitor Intel</span>
-                  <span className="material-symbols-outlined">group</span>
-                </div>
-                <h3 className={styles.cardTitle}>Acme Corp Shift</h3>
-                <p className={styles.cardBody}>Recent job postings suggest Acme Corp is pivoting towards decentralized cloud infrastructure, potentially signaling a new product launch.</p>
-                <div className={styles.cardVisualPlaceholderBarChart}>
-                  <div className={styles.bar1}></div>
-                  <div className={styles.bar2}></div>
-                  <div className={styles.bar3}></div>
-                </div>
-              </Card>
+                <Card>
+                  <div className={styles.cardHeader}>
+                    <span className={styles.eyebrowTertiary}>Competitor Intel</span>
+                    <span className="material-symbols-outlined">group</span>
+                  </div>
+                  <h3 className={styles.cardTitle}>{summary.competitorIntel.title}</h3>
+                  <p className={styles.cardBody}>{summary.competitorIntel.description}</p>
+                  <div className={styles.cardVisualPlaceholderBarChart}>
+                    <div className={styles.bar1}></div>
+                    <div className={styles.bar2}></div>
+                    <div className={styles.bar3}></div>
+                  </div>
+                </Card>
 
-              <Card>
-                <div className={styles.cardHeader}>
-                  <span className={styles.eyebrowSubtle}>Market Sentiment</span>
-                  <span className="material-symbols-outlined">chat_bubble</span>
-                </div>
-                <h3 className={styles.cardTitle}>Consumer Confidence</h3>
-                <p className={styles.cardBody}>Sentiment analysis across B2B SaaS platforms shows a cautious but optimistic outlook for Q3 IT spending.</p>
-                <div className={styles.cardVisualPlaceholderNumber}>
-                  <span>68%</span>
-                </div>
-              </Card>
-            </div>
+                <Card>
+                  <div className={styles.cardHeader}>
+                    <span className={styles.eyebrowSubtle}>Market Sentiment</span>
+                    <span className="material-symbols-outlined">chat_bubble</span>
+                  </div>
+                  <h3 className={styles.cardTitle}>{summary.marketSentiment.title}</h3>
+                  <p className={styles.cardBody}>{summary.marketSentiment.description}</p>
+                  <div className={styles.cardVisualPlaceholderNumber}>
+                    <span>{summary.marketSentiment.value}</span>
+                  </div>
+                </Card>
+              </div>
+            ) : null}
 
             <footer className={styles.footer}>
               <div className={styles.pagination}>
@@ -166,3 +201,5 @@ export const Dashboard: React.FC = () => {
     </div>
   );
 };
+
+export default Dashboard;
