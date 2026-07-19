@@ -167,13 +167,15 @@ export const Dashboard: React.FC = () => {
                   <span className="material-symbols-outlined">{isSearching ? 'hourglass_empty' : 'add'}</span>
                 </button>
               </div>
+              <p style={{ fontSize: '0.85rem', color: '#6b7280', marginTop: '0.5rem', paddingLeft: '1rem' }}>
+                Enter a keyword or competitor name above to generate insights.
+              </p>
             </div>
 
             {!isSearched ? (
               <div style={{ padding: '4rem 2rem', textAlign: 'center', color: '#888' }}>
                 <span className="material-symbols-outlined" style={{ fontSize: '48px', marginBottom: '1rem', opacity: 0.5 }}>manage_search</span>
                 <h3>Ready to Analyze</h3>
-                <p>Enter a keyword or competitor name above to generate insights.</p>
               </div>
             ) : error ? (
               <div style={{ padding: '2rem', textAlign: 'center', color: 'red' }}>{error}</div>
