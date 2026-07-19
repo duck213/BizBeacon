@@ -24,17 +24,20 @@ export const Dashboard: React.FC = () => {
   const [summary, setSummary] = useState<DashboardSummary | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  
+  // Interactive Search States
+  const [searchQuery, setSearchQuery] = useState("");
+  const [isSearched, setIsSearched] = useState(false);
+  const [isSearching, setIsSearching] = useState(false);
 
   useEffect(() => {
     const loadData = async () => {
       try {
         setIsLoading(true);
-        const [historyData, summaryData] = await Promise.all([
-          fetchApi<SearchHistoryItem[]>('/api/v1/search/history'),
-          fetchApi<DashboardSummary>('/api/v1/dashboard/summary')
+        const [historyData] = await Promise.all([
+          fetchApi<SearchHistoryItem[]>('/api/v1/search/history')
         ]);
         setSearchHistory(historyData);
-        setSummary(summaryData);
       } catch (err: any) {
         setError(err.message || 'Failed to load data');
       } finally {
@@ -44,6 +47,32 @@ export const Dashboard: React.FC = () => {
 
     loadData();
   }, []);
+
+  const handleSearch = async () => {
+    if (!searchQuery.trim()) return;
+    setIsSearching(true);
+    
+    try {
+      const result = await fetchApi<{ id: string }>('/api/v1/reports/generate', {
+        method: 'POST',
+        body: JSON.stringify({ keyword: searchQuery })
+      });
+      
+      // Redirect to the analysis page with the newly generated report ID
+      window.location.href = `/analysis?id=${result.id}`;
+    } catch (err) {
+      console.error(err);
+      setError('Failed to generate AI report.');
+    } finally {
+      setIsSearching(false);
+    }
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      handleSearch();
+    }
+  };
 
   return (
     <div className={styles.layout}>
@@ -68,7 +97,7 @@ export const Dashboard: React.FC = () => {
             </div>
           </div>
 
-          <Button variant="secondary" className={styles.newAnalysisBtn}>
+          <Button variant="secondary" className={styles.newAnalysisBtn} onClick={() => { setIsSearched(false); setSearchQuery(""); }}>
             <span className="material-symbols-outlined">add</span>
             New Analysis
           </Button>
@@ -83,13 +112,17 @@ export const Dashboard: React.FC = () => {
           </nav>
 
           <div className={styles.sidebarFooter}>
-            <Link href="#" className={styles.sidebarLink}>
+            <Link href="/" className={styles.sidebarLink} onClick={(e) => { e.preventDefault(); alert("Archive feature coming soon!"); }}>
               <span className="material-symbols-outlined">inventory_2</span>
               Archive
             </Link>
             <Link href="/settings" className={styles.sidebarLink}>
-              <span className="material-symbols-outlined">help</span>
-              Help
+              <span className="material-symbols-outlined">settings</span>
+              Settings
+            </Link>
+            <Link href="/login" className={styles.sidebarLink}>
+              <span className="material-symbols-outlined">logout</span>
+              Logout
             </Link>
           </div>
         </aside>
@@ -126,67 +159,79 @@ export const Dashboard: React.FC = () => {
                   type="text" 
                   placeholder="Enter keywords, competitors, or URLs for deep analysis..." 
                   className={styles.searchInput}
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  onKeyDown={handleKeyDown}
                 />
-                <button className={styles.searchAddBtn}>
-                  <span className="material-symbols-outlined">add</span>
+                <button className={styles.searchAddBtn} onClick={handleSearch} disabled={isSearching}>
+                  <span className="material-symbols-outlined">{isSearching ? 'hourglass_empty' : 'add'}</span>
                 </button>
               </div>
             </div>
 
-            {isLoading ? (
-              <div style={{ padding: '2rem', textAlign: 'center', color: '#888' }}>Loading dashboard data...</div>
+            {!isSearched ? (
+              <div style={{ padding: '4rem 2rem', textAlign: 'center', color: '#888' }}>
+                <span className="material-symbols-outlined" style={{ fontSize: '48px', marginBottom: '1rem', opacity: 0.5 }}>manage_search</span>
+                <h3>Ready to Analyze</h3>
+                <p>Enter a keyword or competitor name above to generate insights.</p>
+              </div>
             ) : error ? (
               <div style={{ padding: '2rem', textAlign: 'center', color: 'red' }}>{error}</div>
             ) : summary ? (
-              <div className={styles.grid}>
-                <Card>
-                  <div className={styles.cardHeader}>
-                    <span className={styles.eyebrowPrimary}>Trend Alert</span>
-                    <span className="material-symbols-outlined">trending_up</span>
-                  </div>
-                  <h3 className={styles.cardTitle}>{summary.trendAlert.title}</h3>
-                  <p className={styles.cardBody}>{summary.trendAlert.description}</p>
-                  <div className={styles.cardVisualPlaceholder}></div>
-                </Card>
+              <>
+                <div className={styles.grid}>
+                  <Card>
+                    <div className={styles.cardHeader}>
+                      <span className={styles.eyebrowPrimary}>Trend Alert</span>
+                      <span className="material-symbols-outlined">trending_up</span>
+                    </div>
+                    <h3 className={styles.cardTitle}>{summary.trendAlert.title}</h3>
+                    <p className={styles.cardBody}>{summary.trendAlert.description}</p>
+                    <div className={styles.cardVisualPlaceholder}></div>
+                  </Card>
 
-                <Card>
-                  <div className={styles.cardHeader}>
-                    <span className={styles.eyebrowTertiary}>Competitor Intel</span>
-                    <span className="material-symbols-outlined">group</span>
-                  </div>
-                  <h3 className={styles.cardTitle}>{summary.competitorIntel.title}</h3>
-                  <p className={styles.cardBody}>{summary.competitorIntel.description}</p>
-                  <div className={styles.cardVisualPlaceholderBarChart}>
-                    <div className={styles.bar1}></div>
-                    <div className={styles.bar2}></div>
-                    <div className={styles.bar3}></div>
-                  </div>
-                </Card>
+                  <Card>
+                    <div className={styles.cardHeader}>
+                      <span className={styles.eyebrowTertiary}>Competitor Intel</span>
+                      <span className="material-symbols-outlined">group</span>
+                    </div>
+                    <h3 className={styles.cardTitle}>{summary.competitorIntel.title}</h3>
+                    <p className={styles.cardBody}>{summary.competitorIntel.description}</p>
+                    <div className={styles.cardVisualPlaceholderBarChart}>
+                      <div className={styles.bar1}></div>
+                      <div className={styles.bar2}></div>
+                      <div className={styles.bar3}></div>
+                    </div>
+                  </Card>
 
-                <Card>
-                  <div className={styles.cardHeader}>
-                    <span className={styles.eyebrowSubtle}>Market Sentiment</span>
-                    <span className="material-symbols-outlined">chat_bubble</span>
+                  <Card>
+                    <div className={styles.cardHeader}>
+                      <span className={styles.eyebrowSubtle}>Market Sentiment</span>
+                      <span className="material-symbols-outlined">chat_bubble</span>
+                    </div>
+                    <h3 className={styles.cardTitle}>{summary.marketSentiment.title}</h3>
+                    <p className={styles.cardBody}>{summary.marketSentiment.description}</p>
+                    <div className={styles.cardVisualPlaceholderNumber}>
+                      <span>{summary.marketSentiment.value}</span>
+                    </div>
+                  </Card>
+                </div>
+
+                <footer className={styles.footer}>
+                  <div className={styles.pagination}>
+                    <button className={styles.activePage}>1</button>
+                    <button>2</button>
+                    <button>3</button>
+                    <span>...</span>
+                    <button>10</button>
                   </div>
-                  <h3 className={styles.cardTitle}>{summary.marketSentiment.title}</h3>
-                  <p className={styles.cardBody}>{summary.marketSentiment.description}</p>
-                  <div className={styles.cardVisualPlaceholderNumber}>
-                    <span>{summary.marketSentiment.value}</span>
-                  </div>
-                </Card>
-              </div>
+                  <Button variant="secondary">10페이지 늘리기</Button>
+                </footer>
+              </>
             ) : null}
 
-            <footer className={styles.footer}>
-              <div className={styles.pagination}>
-                <button>1</button>
-                <button className={styles.activePage}>2</button>
-                <button>3</button>
-                <span>...</span>
-                <button>10</button>
-              </div>
-              <Button variant="secondary">10페이지 늘리기</Button>
-              <div className={styles.footerBottom}>
+            <footer className={styles.footer} style={!isSearched ? { borderTop: 'none' } : {}}>
+              <div className={styles.footerBottom} style={!isSearched ? { marginTop: 'auto' } : {}}>
                 <span>© 2024 BizBeacon Intelligence. All rights reserved.</span>
                 <div className={styles.footerLinks}>
                   <a href="#">Privacy Policy</a>

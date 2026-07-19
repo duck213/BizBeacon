@@ -1,5 +1,6 @@
 "use client";
 import React, { useState, useEffect } from 'react';
+import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import styles from './AnalysisReport.module.css';
 import { TopNav } from '../components/TopNav';
@@ -17,6 +18,9 @@ interface ReportDetails {
 }
 
 export const AnalysisReport: React.FC = () => {
+  const searchParams = useSearchParams();
+  const reportId = searchParams?.get('id') || '1'; // Default to 1 if no id provided
+  
   const [report, setReport] = useState<ReportDetails | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -25,8 +29,7 @@ export const AnalysisReport: React.FC = () => {
     const loadReport = async () => {
       try {
         setIsLoading(true);
-        // Using a hardcoded ID '1' for prototype purposes
-        const data = await fetchApi<ReportDetails>('/api/v1/reports/1');
+        const data = await fetchApi<ReportDetails>(`/api/v1/reports/${reportId}`);
         setReport(data);
       } catch (err: any) {
         setError(err.message || 'Failed to load report details');
@@ -36,7 +39,7 @@ export const AnalysisReport: React.FC = () => {
     };
 
     loadReport();
-  }, []);
+  }, [reportId]);
 
   return (
     <div className={styles.layout}>
