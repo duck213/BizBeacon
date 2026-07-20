@@ -23,6 +23,7 @@ class ShareRequest(BaseModel):
 
 class GenerateReportRequest(BaseModel):
     keyword: str
+    role: str = "전략기획"
     user_email: str = "test@bizbeacon.com"  # Hardcoded for now until Auth is wired
 
 # Pydantic schema for OpenAI structured output
@@ -45,7 +46,7 @@ async def generate_report(req: GenerateReportRequest):
             response_format={ "type": "json_object" },
             messages=[
                 {"role": "system", "content": "You are a professional B2B Market Analyst. Output JSON matching exactly this schema: {\"title\":\"string\",\"impactScore\":0.0,\"summary\":\"string\",\"chartData\":[0,0,0,0,0],\"competitors\":[\"string\",\"string\"]}"},
-                {"role": "user", "content": f"Generate a market intelligence report for the keyword: '{req.keyword}'"}
+                {"role": "user", "content": f"Generate a market intelligence report for the keyword: '{req.keyword}'. The target audience for this report is '{req.role}'. Please tailor the insights accordingly."}
             ]
         )
         content = response.choices[0].message.content

@@ -27,6 +27,7 @@ export const Dashboard: React.FC = () => {
   
   // Interactive Search States
   const [searchQuery, setSearchQuery] = useState("");
+  const [role, setRole] = useState("전략기획");
   const [isSearched, setIsSearched] = useState(false);
   const [isSearching, setIsSearching] = useState(false);
 
@@ -55,7 +56,7 @@ export const Dashboard: React.FC = () => {
     try {
       const result = await fetchApi<{ id: string }>('/api/v1/reports/generate', {
         method: 'POST',
-        body: JSON.stringify({ keyword: searchQuery })
+        body: JSON.stringify({ keyword: searchQuery, role })
       });
       
       // Redirect to the analysis page with the newly generated report ID
@@ -88,8 +89,8 @@ export const Dashboard: React.FC = () => {
         {/* Sidebar */}
         <aside className={styles.sidebar}>
           <div className={styles.sidebarHeader}>
-            <div className={styles.iconContainer}>
-              <span className="material-symbols-outlined text-primary">analytics</span>
+            <div className={styles.iconContainer} style={{ background: 'transparent', border: '1px solid #ccc' }}>
+              <span className="material-symbols-outlined" style={{ color: '#000' }}>analytics</span>
             </div>
             <div>
               <h2 className={styles.sidebarTitle}>Search History</h2>
@@ -116,10 +117,6 @@ export const Dashboard: React.FC = () => {
               <span className="material-symbols-outlined">inventory_2</span>
               Archive
             </Link>
-            <Link href="/settings" className={styles.sidebarLink}>
-              <span className="material-symbols-outlined">settings</span>
-              Settings
-            </Link>
             <Link href="/login" className={styles.sidebarLink}>
               <span className="material-symbols-outlined">logout</span>
               Logout
@@ -137,7 +134,7 @@ export const Dashboard: React.FC = () => {
 
             <div className={styles.searchContainer}>
               <div className={styles.controlsRow}>
-                <select className={styles.roleSelect} defaultValue="전략기획">
+                <select className={styles.roleSelect} value={role} onChange={(e) => setRole(e.target.value)}>
                   <option value="전략기획">전략기획</option>
                   <option value="연구개발">연구개발</option>
                   <option value="영업">영업</option>
@@ -149,7 +146,7 @@ export const Dashboard: React.FC = () => {
                   <option value="디자인">디자인</option>
                   <option value="기타">기타</option>
                 </select>
-                <div className={styles.impactScoreBadge}>
+                <div className={styles.impactScoreBadge} title="현재 검색된 키워드가 비즈니스에 미치는 영향도를 1~10점으로 평가한 AI 스코어입니다.">
                   Business Impact Score: <strong>8.5</strong>
                 </div>
               </div>
@@ -176,6 +173,14 @@ export const Dashboard: React.FC = () => {
               <div style={{ padding: '4rem 2rem', textAlign: 'center', color: '#888' }}>
                 <span className="material-symbols-outlined" style={{ fontSize: '48px', marginBottom: '1rem', opacity: 0.5 }}>manage_search</span>
                 <h3>Ready to Analyze</h3>
+                <div style={{ marginTop: '2rem', textAlign: 'left', maxWidth: '600px', margin: '2rem auto', padding: '1.5rem', backgroundColor: '#f9fafb', borderRadius: '8px', border: '1px solid #e5e7eb' }}>
+                  <h4 style={{ marginBottom: '1rem', color: '#374151' }}>💡 Recommended Insights to Explore</h4>
+                  <ul style={{ listStyleType: 'disc', paddingLeft: '1.5rem', color: '#4b5563', lineHeight: '1.8' }}>
+                    <li><strong>Electric vehicle from Hyundai</strong> - Analysis on global EV market adoption rate.</li>
+                    <li><strong>AI in Retail Business</strong> - Discover automated inventory management trends.</li>
+                    <li><strong>SaaS Pricing Strategy</strong> - Competitor intel on major B2B SaaS pricing models.</li>
+                  </ul>
+                </div>
               </div>
             ) : error ? (
               <div style={{ padding: '2rem', textAlign: 'center', color: 'red' }}>{error}</div>

@@ -14,6 +14,7 @@
 
 | Domain | Method | Endpoint | Description | Request Body (JSON) | Response Body (JSON) |
 | :--- | :--- | :--- | :--- | :--- | :--- |
+| **Analysis** | `POST` | `/api/v1/reports/generate` | 키워드 기반 AI 리포트 생성 | `{ "keyword": "...", "role": "전략기획" }` | `{ "id": "uuid" }` |
 | **Analysis** | `GET` | `/api/v1/reports/:reportId` | 분석 리포트 상세 데이터 (Business Impact Score 1~10점 포함) | - | `{ "title": "...", "impactScore": 9.2, "summary": "...", "chartData": [...], "competitors": [...] }` |
 | **Analysis** | `POST` | `/api/v1/reports/:reportId/draft` | 예비 대안 시나리오 및 맞춤형 기안서 초안 자동 생성 | `{ "role": "Strategic Planning" }` | `{ "draftId": "d_123", "content": "..." }` |
 | **Analysis** | `POST` | `/api/v1/reports/:reportId/share` | 직무 영역별 맞춤형 시각(Role-Based View)으로 사내 협업툴 전송 | `{ "channels": ["slack", "email"] }` | `{ "success": true }` |

@@ -31,6 +31,7 @@ erDiagram
     REPORTS {
         uuid id PK
         string title
+        string target_role "타겟 직무"
         float impact_score "1~10점"
         text summary
         json chart_data
@@ -77,7 +78,7 @@ erDiagram
 | :--- | :--- | :--- | :--- | :--- |
 | **USERS** | `id` (PK)<br>`email`<br>`name`<br>`role`<br>`preferences`<br>`created_at` | UUID<br>VARCHAR<br>VARCHAR<br>VARCHAR<br>JSON<br>DATETIME | Y<br>Y<br>Y<br>Y<br>N<br>Y | 1:N with `SEARCH_HISTORIES`<br>1:N with `NOTIFICATIONS` |
 | **SEARCH_HISTORIES** | `id` (PK)<br>`user_id` (FK)<br>`keyword`<br>`search_type`<br>`created_at` | UUID<br>UUID<br>VARCHAR<br>VARCHAR<br>DATETIME | Y<br>Y<br>Y<br>Y<br>Y | Belongs to `USERS` |
-| **REPORTS** | `id` (PK)<br>`title`<br>`impact_score`<br>`summary`<br>`chart_data`<br>`created_at` | UUID<br>VARCHAR<br>DECIMAL<br>TEXT<br>JSON<br>DATETIME | Y<br>Y<br>Y<br>Y<br>N<br>Y | 1:N with `DRAFTS`<br>1:N with `COMPETITORS` |
+| **REPORTS** | `id` (PK)<br>`title`<br>`target_role`<br>`impact_score`<br>`summary`<br>`chart_data`<br>`created_at` | UUID<br>VARCHAR<br>VARCHAR<br>DECIMAL<br>TEXT<br>JSON<br>DATETIME | Y<br>Y<br>Y<br>Y<br>Y<br>N<br>Y | 1:N with `DRAFTS`<br>1:N with `COMPETITORS` |
 | **DRAFTS** | `id` (PK)<br>`report_id` (FK)<br>`target_role`<br>`content`<br>`created_at` | UUID<br>UUID<br>VARCHAR<br>TEXT<br>DATETIME | Y<br>Y<br>Y<br>Y<br>Y | Belongs to `REPORTS` |
 | **COMPETITORS** | `id` (PK)<br>`report_id` (FK)<br>`comp_name`<br>`threat_level`<br>`created_at` | UUID<br>UUID<br>VARCHAR<br>VARCHAR<br>DATETIME | Y<br>Y<br>Y<br>Y<br>Y | Belongs to `REPORTS` |
 | **SCRAPING_TASKS** | `id` (PK)<br>`domain`<br>`status`<br>`task_type`<br>`created_at` | UUID<br>VARCHAR<br>VARCHAR<br>VARCHAR<br>DATETIME | Y<br>Y<br>Y<br>Y<br>Y | (독립 스케줄러 테이블) |

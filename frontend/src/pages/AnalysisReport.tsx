@@ -86,7 +86,7 @@ export const AnalysisReport: React.FC = () => {
               {/* Main Insights */}
               <div className={styles.primaryContent}>
                 <Card className={styles.chartCard}>
-                  <h3 className={styles.sectionTitle}>Adoption Rate Over Time</h3>
+                  <h3 className={styles.sectionTitle}>Trend Analysis Over Time</h3>
                   <div className={styles.chartPlaceholder}>
                     <div className={styles.lineChart}></div>
                   </div>
